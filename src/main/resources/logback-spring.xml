@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	<contextName>frame</contextName>
+
+	<springProperty scope="context" name="logPath" source="log.path" />
+
+	<!--每个appender都是一个日志策略 -->
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 演示按时间滚动的策略 -->
+	<appender name="sysAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${logPath}/sys.log</File>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<maxFileSize>50MB</maxFileSize>
+			<FileNamePattern>${logPath}/sys.%d{yyyy-MM-dd}.%i.log.gz
+			</FileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+
+	<!--根日志级别 -->
+	<root>
+		<level value="info" />
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="sysAppender" />
+	</root>
+
+</configuration>  
